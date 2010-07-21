@@ -1,6 +1,6 @@
 steal.plugins('jquery/view','jquery/lang/rsplit').then(function($){
 
-//helpers we use 
+//helpers we use
 var chop =  function(string){
 	    return string.substr(0, string.length - 1);
 	},
@@ -16,7 +16,7 @@ var EJS = function( options ){
 		};
 	}
 
-	//if a function, set func as template func	
+	//if a function, set func as template func
 	if(typeof options == "function"){
 		this.template = {};
 		this.template.process = options;
@@ -34,7 +34,7 @@ var EJS = function( options ){
 /**
  * @constructor jQuery.View.EJS
  * @plugin view
- * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
+ * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a>
  * style client side templates.  Use them with controllers to easily build html and inject
  * it into the DOM.
  * <h3>Example</h3>
@@ -48,21 +48,21 @@ var EJS = function( options ){
  * @codeend
  * For the following examples, we assume this view is in <i>'views\tasks\list.ejs'</i>
  * <h2>Use</h2>
- * There are 2 common ways to use Views: 
+ * There are 2 common ways to use Views:
  * <ul>
  *     <li>Controller's [jQuery.Controller.prototype.view view function]</li>
- *     <li>The jQuery Helpers: [jQuery.fn.after after], 
- *                             [jQuery.fn.append append], 
- *                             [jQuery.fn.before before], 
- *                             [jQuery.fn.before html], 
- *                             [jQuery.fn.before prepend], 
- *                             [jQuery.fn.before replace], and 
+ *     <li>The jQuery Helpers: [jQuery.fn.after after],
+ *                             [jQuery.fn.append append],
+ *                             [jQuery.fn.before before],
+ *                             [jQuery.fn.before html],
+ *                             [jQuery.fn.before prepend],
+ *                             [jQuery.fn.before replace], and
  *                             [jQuery.fn.before text].</li>
  * </ul>
  * <h3>View</h3>
- * jQuery.Controller.prototype.view is the preferred way of rendering a view.  
- * You can find all the options for render in 
- * its [jQuery.Controller.prototype.view documentation], but here is a brief example of rendering the 
+ * jQuery.Controller.prototype.view is the preferred way of rendering a view.
+ * You can find all the options for render in
+ * its [jQuery.Controller.prototype.view documentation], but here is a brief example of rendering the
  * <i>list.ejs</i> view from a controller:
  * @codestart
  * $.Controller.extend("TasksController",{
@@ -76,14 +76,14 @@ var EJS = function( options ){
  *     }
  * })
  * @codeend
- * 
- * 
+ *
+ *
  * <h2>View Helpers</h2>
- * View Helpers return html code.  View by default only comes with 
- * [jQuery.View.EJS.Helpers.prototype.view view] and [jQuery.View.Helpers.prototype.to_text to_text].
+ * View Helpers return html code.  View by default only comes with
+ * [jQuery.View.EJS.Helpers.prototype.view view] and [jQuery.View.EJS.Helpers.prototype.to_text to_text].
  * You can include more with the view/helpers plugin.  But, you can easily make your own!
  * Learn how in the [jQuery.View.EJS.Helpers Helpers] page.
- * 
+ *
  * @init Creates a new view
  * @param {Object} options A hash with the following options
  * <table class="options">
@@ -124,7 +124,7 @@ var EJS = function( options ){
 					<td>true to cache template.
 					</td>
 				</tr>
-				
+
 			</tbody></table>
  */
 $.View.EJS = EJS;
@@ -154,7 +154,7 @@ EJS.prototype = {
 
 /* @Static*/
 EJS.Scanner = function(source, left, right) {
-	
+
     extend(this,
         {left_delimiter: 	left +'%',
          right_delimiter: 	'%'+right,
@@ -163,7 +163,7 @@ EJS.Scanner = function(source, left, right) {
          left_equal: 		left+'%=',
          left_comment: 	left+'%#'})
 
-	this.SplitRegexp = (left=='[' ? /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/ : 
+	this.SplitRegexp = (left=='[' ? /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/ :
 			new RegExp('('+this.double_left+
 			')|(%%'+this.double_right+
 			')|('+this.left_equal+
@@ -171,7 +171,7 @@ EJS.Scanner = function(source, left, right) {
 			')|('+this.left_delimiter+
 			')|('+this.right_delimiter+
 			'\n)|('+this.right_delimiter+')|(\n)') );
-	
+
 	this.source = source;
 	this.stag = null;
 	this.lines = 0;
@@ -180,7 +180,7 @@ EJS.Scanner.to_text = function(input){
 	var myid;
 	if(input == null || input === undefined)
         return '';
-	
+
     if(input instanceof Date)
 		return input.toDateString();
 	if(input.hookup){
@@ -191,7 +191,7 @@ EJS.Scanner.to_text = function(input){
 	}
 	if(typeof input == 'function')
 		return  "data-view-id='"+$.View.hookup(input)+"'";
-		
+
 	if(isArray(input)){
 		myid = $.View.hookup(function(el, id){
 			for(var i = 0 ; i < input.length; i++){
@@ -203,8 +203,8 @@ EJS.Scanner.to_text = function(input){
 	if(input.nodeName || input.jQuery){
 		throw "elements in views are not supported"
 	}
-	
-	if(input.toString) 
+
+	if(input.toString)
         return myid ? input.toString(myid) : input.toString();
 	return '';
 };
@@ -249,7 +249,7 @@ EJS.Buffer = function(pre_cmd, post_cmd) {
 	}
 };
 EJS.Buffer.prototype = {
-	
+
   push: function(cmd) {
 	this.line.push(cmd);
   },
@@ -270,14 +270,14 @@ EJS.Buffer.prototype = {
 		line = null;
 	}
   }
- 	
+
 };
 
 
 EJS.Compiler = function(source, left) {
     this.pre_cmd = ['var ___ViewO = [];'];
 	this.post_cmd = new Array();
-	this.source = ' ';	
+	this.source = ' ';
 	if (source != null)
 	{
 		if (typeof source == 'string')
@@ -287,7 +287,7 @@ EJS.Compiler = function(source, left) {
 			this.source = source;
 		}else if (source.innerHTML){
 			this.source = source.innerHTML;
-		} 
+		}
 		if (typeof this.source != 'string'){
 			this.source = "";
 		}
@@ -413,7 +413,7 @@ EJS.Compiler.prototype = {
 					</td>
 				</tr>
 	</tbody></table>
- * 
+ *
  */
 EJS.options = {
 	cache : true,
@@ -426,7 +426,7 @@ EJS.INVALID_PATH =  -1;
 
 /**
  * @constructor jQuery.View.EJS.Helpers
- * By adding functions to jQuery.View.EJS.Helpers.prototype, those functions will be available in the 
+ * By adding functions to jQuery.View.EJS.Helpers.prototype, those functions will be available in the
  * views.
  * @init Creates a view helper.  This function is called internally.  You should never call it.
  * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
@@ -468,7 +468,7 @@ EJS.Helpers.prototype = {
 		}
 	}
 };
-    
+
 
 $.View.register({
 	suffix : "ejs",
@@ -488,7 +488,7 @@ $.View.register({
 		return this.renderer(id, text);
 	},
 	script : function(id, src){
-		 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
+		 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";
 	},
 	renderer : function(id, text){
 		var ejs = new EJS({text: text, name: id})
@@ -497,6 +497,6 @@ $.View.register({
 		}
 	}
 })
-	
+
 });
 
